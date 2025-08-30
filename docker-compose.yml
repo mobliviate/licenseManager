@@ -5,7 +5,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     command: ["redis-server", "--save", "", "--appendonly", "no"]
-    networks: [licnet]
+    networks: [proxy-net]
 
   app:
     build: ./app
@@ -31,7 +31,9 @@ services:
       - redis
     ports:
       - "8080:8080"
-    networks: [licnet]
+    networks:
+      - proxy-net
 
 networks:
-  licnet:
+  proxy-net:
+    external: true
