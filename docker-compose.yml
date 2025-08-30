@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks: [licnet]
+
+  app:
+    build: ./app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TZ=Europe/Zurich
+    depends_on:
+      - redis
+    ports:
+      - "8080:8080"
+    networks: [licnet]
+
+networks:
+  licnet:
